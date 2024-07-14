@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import RadarChart from './RadarChart';
+import RadarChartCircle from './RadarChartCircle';
+import RadarChartPolygon from './RadarChartPolygon';
 
 const initialData = [
-  { axis: 'A', value: 1 },
-  { axis: 'B', value: 1 },
-  { axis: 'C', value: 0 },
-  // { axis: 'D', value: 0 },
-  // { axis: 'E', value: 0 }
+  { axis: 'A', value: 1.7 },
+  { axis: 'B', value: 1.7 },
+  { axis: 'C', value: 1.7 },
+  { axis: 'D', value: 1.7 },
+  { axis: 'E', value: 1.7 }
 ];
 
 const ADrillDownValues = [
-  { axis: 'A.1', value: 32 },
-  { axis: 'A.2', value: 8 },
-  { axis: 'A.3', value: 23 },
-  { axis: 'A.4', value: 1 },
-  { axis: 'A.5', value: 35 }
+  { axis: 'A.1', value: 0.2 },
+  { axis: 'A.2', value: 3.0 },
+  { axis: 'A.3', value: 0.3 },
+  { axis: 'A.4', value: 4.2 },
+  { axis: 'A.5', value: 0.5 }
 ];
 
 const App = () => {
@@ -22,7 +23,8 @@ const App = () => {
   const [selectedData, setSelectedData] = useState(null);
 
   const handleDrillDown = (d) => {
-    if (d.axis === 'A') {
+    console.log(d)
+    if (d === 'A') {
       setData(ADrillDownValues);
       setSelectedData(null); // Clear selected data on drill down
     } else {
@@ -33,7 +35,9 @@ const App = () => {
   return (
     <div className="App">
       <h1>Radar Chart with Drill Down</h1>
-      <RadarChart data={data} onDrillDown={handleDrillDown} />
+      <RadarChartPolygon data={data} onDrillDown={handleDrillDown} />
+
+      <RadarChartCircle data={data} onDrillDown={handleDrillDown} />
       {selectedData && (
         <div>
           <h2>Details for {selectedData.axis}</h2>

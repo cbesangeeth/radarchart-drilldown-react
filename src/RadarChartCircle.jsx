@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const RadarChart = ({ data, onDrillDown }) => {
+const RadarChartCircle = ({ data, onDrillDown }) => {
   const svgRef = useRef();
 
   useEffect(() => {
@@ -100,4 +100,4 @@ const RadarChart = ({ data, onDrillDown }) => {
   );
 };
 
-export default RadarChart;
+export default RadarChartCircle;
