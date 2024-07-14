@@ -7,11 +7,12 @@ const RadarChart = ({ data, onDrillDown }) => {
   useEffect(() => {
     const width = 500;
     const height = 500;
-    const levels = 5;
+    const levels = 5;  // Set levels to 5 to include 0 to 5
     const radius = Math.min(width / 2, height / 2);
     const angleSlice = (Math.PI * 2) / data.length;
 
-    const maxValue = Math.max(...data.map(d => d.value));
+    // Ensure maxValue is at least 1 to avoid zero max value issues
+    const maxValue = Math.max(1, ...data.map(d => d.value));
     const rScale = d3.scaleLinear()
       .range([0, radius])
       .domain([0, maxValue]);
@@ -24,15 +25,26 @@ const RadarChart = ({ data, onDrillDown }) => {
       .append('g')
       .attr('transform', `translate(${width / 2},${height / 2})`);
 
-    // Draw the background circles
+    // Draw the background circles and number labels
     g.selectAll('.grid')
       .data(d3.range(1, levels + 1).reverse())
-      .enter().append('circle')
+      .enter().append('g')
       .attr('class', 'grid')
-      .attr('r', d => radius / levels * d)
-      .style('fill', '#CDCDCD')
-      .style('stroke', '#CDCDCD')
-      .style('fill-opacity', 0.1);
+      .each(function(d) {
+        d3.select(this).append('circle')
+          .attr('r', radius / levels * d)
+          .style('fill', '#CDCDCD')
+          .style('stroke', '#CDCDCD')
+          .style('fill-opacity', 0.1);
+
+        d3.select(this).append('text')
+          .attr('x', 10)  // Move text slightly away from the axis line
+          .attr('y', -radius / levels * d)
+          .attr('dy', '-0.4em')
+          .style('font-size', '10px')
+          .attr('fill', '#737373')
+          .text(d);
+      });
 
     // Draw the axes
     const axisGrid = g.selectAll('.axis')
@@ -43,8 +55,8 @@ const RadarChart = ({ data, onDrillDown }) => {
     axisGrid.append('line')
       .attr('x1', 0)
       .attr('y1', 0)
-      .attr('x2', (d, i) => rScale(maxValue * 1.1) * Math.cos(angleSlice * i - Math.PI / 2))
-      .attr('y2', (d, i) => rScale(maxValue * 1.1) * Math.sin(angleSlice * i - Math.PI / 2))
+      .attr('x2', (d, i) => rScale(maxValue) * Math.cos(angleSlice * i - Math.PI / 2))
+      .attr('y2', (d, i) => rScale(maxValue) * Math.sin(angleSlice * i - Math.PI / 2))
       .attr('class', 'line')
       .style('stroke', 'grey')
       .style('stroke-width', '2px');
@@ -54,8 +66,8 @@ const RadarChart = ({ data, onDrillDown }) => {
       .style('font-size', '11px')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
-      .attr('x', (d, i) => rScale(maxValue * 1.25) * Math.cos(angleSlice * i - Math.PI / 2))
-      .attr('y', (d, i) => rScale(maxValue * 1.25) * Math.sin(angleSlice * i - Math.PI / 2))
+      .attr('x', (d, i) => rScale(maxValue * 1.1) * Math.cos(angleSlice * i - Math.PI / 2))
+      .attr('y', (d, i) => rScale(maxValue * 1.1) * Math.sin(angleSlice * i - Math.PI / 2))
       .text(d => d.axis);
 
     // Draw the radar chart blobs

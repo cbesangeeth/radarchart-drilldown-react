@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import RadarChart from './RadarChart';
 
 const initialData = [
-  { axis: 'A', value: 42 },
-  { axis: 'B', value: 58 },
-  { axis: 'C', value: 73 },
-  { axis: 'D', value: 91 },
-  { axis: 'E', value: 65 }
+  { axis: 'A', value: 1 },
+  { axis: 'B', value: 1 },
+  { axis: 'C', value: 0 },
+  // { axis: 'D', value: 0 },
+  // { axis: 'E', value: 0 }
 ];
 
 const ADrillDownValues = [
